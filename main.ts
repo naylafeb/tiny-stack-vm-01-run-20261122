@@ -6,6 +6,7 @@ import { join } from 'node:path';
 
 const I = process.env.MAKEFUN_INPUT_DIR ?? '/input';
 const O = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const MAX_STEPS = 1000000;
 
 // [opcode, immediate bytes, pops, pushes] for every valid opcode.
 const OPS = [
@@ -34,7 +35,7 @@ function run(P, inp) {
   let sp = 0, csp = 0, olen = 0, inPos = 0, pc = 0, steps = 0;
   const done = (exit) => [out.subarray(0, olen), exit];
   for (;;) {
-    if (steps === 1000000) return done(10);
+    if (steps === MAX_STEPS) return done(10);
     if (pc < 0 || pc >= n) return done(9);
     const op = P[pc];
     if (!VALID[op]) return done(5);
